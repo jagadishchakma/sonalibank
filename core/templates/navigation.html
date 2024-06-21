@@ -1,0 +1,53 @@
+<header>
+ 
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+          <a class="navbar-brand" href="#">Sonali Bank</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'transaction_report' %}">Report</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'deposit_money' %}">Deposit</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'withdraw_money' %}">Withdraw</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'loan_request' %}">Loan Request</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'balance_transfer' %}">Balance Transfer</a>
+              </li>
+            </ul>
+            <div class="d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                    <span class="text-primary"><small>Welcome, {{ request.user.username }} (balance: {{request.user.account.balance}})</small></span>
+                    <a class="btn btn-primary ms-3" href="{% url 'profile' %}">Profile</a>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Logout" class="btn btn-outline-info ms-3">
+                    </form>
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'register' %}">Signup</a>
+                    <a class="btn btn-outline-info ms-3" href="{% url 'login' %}">Login</a>
+                    
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert {% if msg.tags %} alert-{{msg.tags}} {% endif %}" role="alert">
+                {{msg}}
+                </div>
+            {% endfor %}
+        {% endif %}
+      </div>
+</header>

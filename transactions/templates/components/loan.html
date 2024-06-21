@@ -1,0 +1,30 @@
+<div class="container">
+    <h3 class="text-center">Loan Report</h3>
+    <hr>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Loan ID</th>
+            <th scope="col">Loan Amount</th>
+            <th scope="col">Loan Approved</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+                <tr>
+                    <th scope="row">{{ loan.id }}</th>
+                    <td>{{ loan.amount   }}</td>
+                    <td>{{ loan.loan_approve }}</td>
+                    <td>
+                        {% if loan.loan_approve %}
+                        <a href="{% url 'loan_pay' loan.id %}" class="btn btn-outline-danger">Pay</a>
+                        {% else %}
+                        <span class="bg-danger text-white p-2">Loan pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>

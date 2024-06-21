@@ -1,0 +1,38 @@
+{% load crispy_forms_tags %}
+<div class="container">
+    {% if title == 'Loan Request Page' %}
+    <div><a href="{% url 'loan_list' %}" class="text-center">View All Loan List</a></div>
+    {% endif %}
+    <h1 class="text-center">{{title}}</h1>
+    <form method="POST" style="width: 50%; margin:auto">
+        {% csrf_token %}
+        <!-- {{ form | crispy }} -->
+        <div class="d-flex flex-column justify-content-center">
+            <label for="amount" class="text-center bg-add">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" placeholder="Amount">
+        </div>
+        {% if form.amount.errors %}
+            {% for error in form.amount.errors %}
+            <div class="alert alert-danger" role="alert">
+               {{error}}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% if title == 'Balance Transfer' %}
+            <div class="d-flex flex-column justify-content-center">
+                <label for="receiver_account_no" class="text-center bg-add">Receiver Account No</label>
+                <input type="number" class="form-control" id="receiver_account_no" name="receiver_account_no" placeholder="receiver_account_no">
+            </div>
+            {% if form.receiver_account_no.errors %}
+                {% for error in form.receiver_account_no.errors %}
+                <div class="alert alert-danger" role="alert">
+                {{error}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-info m-2">Submit</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}
+<title>{{title}}</title>
+{% endblock %}
+
+{% block body %}
+    {% include 'components/loan.html' %}
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}

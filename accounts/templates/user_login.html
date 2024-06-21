@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title> Login Page</title>
+{% endblock %}
+
+{% block body %}
+    <section class="signup">
+        <div class="container">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <h1 class="text-center">Login</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                
+                <input type="submit" value="Submit" class="btn btn-primary mt-3">
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}

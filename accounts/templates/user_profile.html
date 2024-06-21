@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title> Profile Page</title>
+{% endblock %}
+
+{% block body %}
+    <section class="signup">
+        <div class="container">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <h1 class="text-center">Profile</h1>
+            <form method="post">
+                {% csrf_token %}
+                <!-- {{ form|crispy }} -->
+                {% if form.hidden_fields %}
+                    {% for hidden_field in form.hidden_fields %}
+                        {{hidden_field.errors}}
+                        {{hidden_field}}
+                    {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name }}
+                        {{ form.first_name.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name }}
+                        {{ form.last_name.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {{ form.email.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.account_type.label_tag }}
+                        {{ form.account_type }}
+                        {{ form.account_type.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.gender.label_tag }}
+                        {{ form.gender }}
+                        {{ form.gender.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.birth_date.label_tag }}
+                        {{ form.birth_date }}
+                        {{ form.birth_date.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.street_address.label_tag }}
+                        {{ form.street_address }}
+                        {{ form.street_address.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.city.label_tag }}
+                        {{ form.city }}
+                        {{ form.city.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.postal_code.label_tag }}
+                        {{ form.postal_code }}
+                        {{ form.postal_code.errors}}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.country.label_tag }}
+                        {{ form.country }}
+                        {{ form.country.errors}}
+                    </div>
+                </div>
+                <input type="submit" value="Submit" class="btn btn-primary mt-3">
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
