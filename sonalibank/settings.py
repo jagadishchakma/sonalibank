@@ -91,23 +91,23 @@ WSGI_APPLICATION = 'sonalibank.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': env("DB_NAME"),
-#         'USER': env("DB_USER"),
-#         'PASSWORD': env("DB_PASSWORD"),
-#         'HOST': env("DB_HOST"),
-#         'PORT': env("DB_PORT"),
-#    }
-# }
-# Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://sonalibank_user:Lwh1Kl2h6Qj6TuLYQs8DAUVovDDUOXrQ@dpg-cpqi51aj1k6c73bghs7g-a.oregon-postgres.render.com/sonalibank',
-    )
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
+   }
 }
+# Replace the SQLite DATABASES configuration with PostgreSQL:
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default='postgresql://sonalibank_user:Lwh1Kl2h6Qj6TuLYQs8DAUVovDDUOXrQ@dpg-cpqi51aj1k6c73bghs7g-a.oregon-postgres.render.com/sonalibank',
+#     )
+# }
 
 
 # Password validation

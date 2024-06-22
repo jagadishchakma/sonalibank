@@ -72,6 +72,7 @@ class WithdrawMoneyView(TransactionCreateMixin):
     def get_initial(self):
         initial = {'transaction_type': Withdrawal}
         return initial  
+   
     def form_valid(self,form):
         last_decision = SiteAdmin.objects.latest('created_at')
         decision = last_decision.bankrupt
@@ -175,6 +176,13 @@ class BalanceTransferView(TransactionCreateMixin):
     def get_initial(self):
         initial = {'transaction_type': Balance_Transfer}
         return initial  
+    def send_transaction_mail(self, receiver_account, msg, amount, type, sendto):
+        mail_subject=msg
+        message = render_to_string('deposit_email.html', {'user':{'first_name':receiver_account.user.first_name,'last_name':receiver_account.user.last_name}, 'amount':amount, 'type': type})
+        to_email = self.request.user.email
+        send_email = EmailMultiAlternatives(mail_subject,'',to=[sendto])
+        send_email.attach_alternative(message, 'text/html')
+        send_email.send()
     def form_valid(self,form):
         amount = form.cleaned_data['amount']
         account = self.request.user.account
@@ -184,9 +192,12 @@ class BalanceTransferView(TransactionCreateMixin):
         )
         receiver_account = UserBankAccount.objects.get(account_no=form.cleaned_data['receiver_account_no'])
         receiver_account.balance += amount
-
+        receiver_account.save(
+            update_fields = ['balance']
+        )
         messages.success(self.request, f"{amount}$ was transfered to this account {receiver_account.account_no} successfully.")
         super().send_transaction_email('Balance Transfer message', amount, 'Balance Transfer')
+        self.send_transaction_mail(receiver_account,'Balance Receive message', amount, 'Balance Receive', sendto=receiver_account.user.email)
         return super().form_valid(form)
 
 

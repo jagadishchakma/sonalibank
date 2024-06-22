@@ -3,11 +3,15 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from .forms import UserRegistrationForm,UserLoginForm,UserProfileForm
 from django.urls import reverse_lazy
-from django.contrib.auth import login,authenticate
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import login,authenticate,update_session_auth_hash
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import UpdateView
+from django.core.mail import EmailMessage,EmailMultiAlternatives
+from django.template.loader import render_to_string
 # Create your views here.
 
 class UserRegistrationView(FormView):
@@ -60,3 +64,24 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
         initial['country'] = self.request.user.address.country
         return initial
     
+class UserPassChangeView(PasswordChangeView):
+    template_name = 'pass_change.html'
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('profile')
+
+    def send_password_change_email(self, msg, type):
+        mail_subject=msg
+        message = render_to_string('pass_change_email.html', {'user':self.request.user, 'type': type})
+        to_email = self.request.user.email
+        send_email = EmailMultiAlternatives(mail_subject,'',to=[to_email])
+        send_email.attach_alternative(message, 'text/html')
+        send_email.send()
+
+    def form_valid(self, form):
+        form.save()
+        # Updating the password logs out all other sessions for the user
+        # except the current one.
+        update_session_auth_hash(self.request, form.user)
+        self.send_password_change_email('Password Change Confirmation','Password change')
+        logout(self.request)
+        return super().form_valid(form)

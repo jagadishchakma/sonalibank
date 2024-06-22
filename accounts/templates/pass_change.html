@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title> Password Change Page</title>
+{% endblock %}
+
+{% block body %}
+    <section class="signup">
+        <div class="container">
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <h1 class="text-center">Pssword Change</h1>
+            <form method="post" style="width:50%; margin: auto">
+                {% csrf_token %}
+                <!-- {{ form|crispy }} -->
+                {% for frm in form %}
+                {{frm.label_tag}}
+                {{frm}}
+                {{frm.errors}}
+                {% endfor %}
+                
+                <input type="submit" value="Submit" class="btn btn-primary mt-3">
+    
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock %}
